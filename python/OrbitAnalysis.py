@@ -12,7 +12,7 @@ from python.MySort import MySort
 from python.Random import RandomOrbit
 
 
-# calculate probability of being stable [1] for each hypotheses outfile0 and outfile1
+#  calculate probability of being stable [1] for each hypotheses outfile0 and outfile1
 def get_prob(InputFile):
     # read input file
     with open(InputFile) as ifile:

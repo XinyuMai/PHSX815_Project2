@@ -122,8 +122,8 @@ class RandomOrbit:
         Hill parameter calculation with two or more orbiting planets orbit our sun.
         Generate random mass, eccentricity, semi-major axis for each planet
         calculates Hill parameter for planet pairs, returns Hill values
-        Hill criterion (e..g. Chambers et al. 1996): >1 => stable,
-        if one of pair is having Hill value < 1, then system is unstable
+        Hill criterion (e..g. Chambers et al. 1996): > 2*sqr(3) => stable,
+        if one of pair is having Hill value < 2*sqr(3), then system is unstable
         stable represent as value 1; unstable as 0
         '''
         N_planets = 2
@@ -145,7 +145,7 @@ class RandomOrbit:
            #e = max(e1,e2)
             t1 = (a1+a2)/2 ; t2 = ( (m1+m2)/(3*self.Msun) ) **(1/3.)
             H = abs((a2-a1))/(t1 * t2)
-            return H/(2*np.sqrt(3))
+            return H          #/(2*np.sqrt(3))
         
         # Generate labels
         s = '' ; H = []
@@ -158,7 +158,7 @@ class RandomOrbit:
         
         #print(pair_string,H)
         
-        # if one of pair is having Hill value < 1, system is unstable (0)
+        # if one of pair is having Hill value < 2*np.sqrt(3), system is unstable (0)
         smallest = min(H)
         if smallest > c:
             return 1

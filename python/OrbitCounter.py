@@ -79,6 +79,6 @@ if __name__ == "__main__":
         for e in range(0,Nexp):
             for t in range(0,Nsystem):
                 print(random.hill_parms(), end=' ')
-            print(" ")
+            print("  ")
 
 
