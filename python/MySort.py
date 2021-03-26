@@ -3,7 +3,7 @@
 import sys
 import numpy as np
 
-from Random import RandomOrbit
+from Random import RandomDist
 
 #################
 # MySort class
@@ -14,7 +14,7 @@ class MySort:
 
     # initialization method for Random class
     def __init__(self, seed = 5555):
-        self.m_random = RandomOrbit(seed)
+        self.m_random = RandomDist(seed)
 
     # sorts array using bubble sort
     def BubbleSort(self, array):

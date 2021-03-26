@@ -7,7 +7,8 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 from itertools import combinations
-
+from scipy.stats import beta
+import random
 # MKS units, constants
 sec = 1
 meter = 1
@@ -26,7 +27,7 @@ Mjup = 1.9e27 * kg
 # Random class
 #################
 # class that can generate random numbers
-class RandomOrbit:
+class RandomDist:
     """A random number generator class"""
 
     # initialization method for Random class
@@ -80,7 +81,7 @@ class RandomOrbit:
         if p < 0. or p > 1.:
             return 1
         
-        R = self.hill_parms()
+        R = self.rand()
 
         if R < p:
             return 1
@@ -93,7 +94,7 @@ class RandomOrbit:
       if beta <= 0.:
         beta = 1.
 
-      R = self.rand();
+      R = self.rand()
 
       while R <= 0.:
         R = self.rand()
@@ -115,52 +116,20 @@ class RandomOrbit:
         
         X = y1*sigma+mu
         return X
+        
+        
+    # implement beta distribution
+    def Beta(self, a, b, n):
+        import numpy as np
+        import random
+        # two shape parameters namely 𝛼 and 𝛽 both >0
+        if a <= 0.:
+            a = 0.5
+            
+        if b <= 0.:
+            b = 0.5
+        
+        X = np.random.beta(a, b, n)
+        
+        return X
     
-    
-    def hill_parms(self, c): # with different Hill criterion  (being stable)
-        '''
-        Hill parameter calculation with two or more orbiting planets orbit our sun.
-        Generate random mass, eccentricity, semi-major axis for each planet
-        calculates Hill parameter for planet pairs, returns Hill values
-        Hill criterion (e..g. Chambers et al. 1996): > 2*sqr(3) => stable,
-        if one of pair is having Hill value < 2*sqr(3), then system is unstable
-        stable represent as value 1; unstable as 0
-        '''
-        N_planets = 2
-        
-        # assuming circular orbit, planetary parameters M_planet, a for each planet
-        
-        m_array =[]; a_array=[]
-        for i in range(int(N_planets)):
-            '''mass and semi major axis using exponential function returns a random double (0 to infty) ;
-            eccentricity is from 0~1 thus returns a random floating point number between (0, 1) (uniform)'''
-            m = self.Exponential() * Mjup
-            a = self.Exponential() * AU
-            #e = self.rand()
-            m_array.append(m)
-            a_array.append(a)
-            #e_array.append(e)
-        
-        def H_parm(a1,a2,m1,m2):
-           #e = max(e1,e2)
-            t1 = (a1+a2)/2 ; t2 = ( (m1+m2)/(3*self.Msun) ) **(1/3.)
-            H = abs((a2-a1))/(t1 * t2)
-            return H          #/(2*np.sqrt(3))
-        
-        # Generate labels
-        s = '' ; H = []
-        for i in range(N_planets): s +=str(i+1)
-        pair_string = ['%s-%s'% (x,y) for (x,y) in list(combinations(s,2))]
-        
-        #calculate Hill parameters using random chosen orbit parameters
-        for (j,k) in list( combinations(list(range(0,N_planets)),2) ):
-            H.append( H_parm(a_array[j],a_array[k], m_array[j],m_array[k]) )
-        
-        #print(pair_string,H)
-        
-        # if one of pair is having Hill value < 2*np.sqrt(3), system is unstable (0)
-        smallest = min(H)
-        if smallest > c:
-            return 1
-        else:
-            return 0
